@@ -1,0 +1,37 @@
+body{
+    background: rgb(35, 35, 36);
+}
+
+.gameBoard{
+    width: 200px;
+    height: 200px;
+    border: 1px solid gray;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.gameBoard div {
+    width: 20px;
+    height: 20px;
+}
+
+.snake {
+    background: yellow;   
+}
+
+.apple {
+    background: red;
+}
+
+.prompt {
+    background: whitesmoke;
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    top: 100px;
+    left: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
