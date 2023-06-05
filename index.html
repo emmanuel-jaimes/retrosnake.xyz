@@ -1,26 +1,148 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>### Retro Snake Under Construction ###</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
+<head>
+  <title>Snake Game</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="400" height="400"></canvas>
 
-    <body>
-        <h1 style="color: white;"> retro snake coming soon </h1>
-        <h1>retro snake</h1>
-        <div class="scoreDisplay"> score: 0 </div>
-        <div class="gameBoard"></div>
-        <div class="button">
-            <button class="up">up</button>
-            <button class="down">down</button>
-            <button class="left">left</button>
-            <button class="right">right</button>
-        </div>
-        <div class="prompt">
-            <button class="restart">restart</button>
-        </div>
+  <script>
+    // Set up the game canvas
+    const canvas = document.getElementById("gameCanvas");
+    const context = canvas.getContext("2d");
 
-        <script>
-            // game functions 
-        </script>
-    </body>
+    // Set the size of the snake and the game board
+    const snakeSize = 20;
+    const boardSize = 20;
+    const boardWidth = canvas.width / boardSize;
+    const boardHeight = canvas.height / boardSize;
+    
+
+    // Initialize the snake position and velocity
+    let snakeX = boardWidth / 2;
+    let snakeY = boardHeight / 2;
+    let snakeXSpeed = 1;
+    let snakeYSpeed = 0;
+
+    // Initialize the food position
+    let foodX = Math.floor(Math.random() * boardWidth);
+    let foodY = Math.floor(Math.random() * boardHeight);
+
+    // Initialize the snake body
+    const snakeBody = [];
+
+    // Initialize the score
+    let score = 0;
+
+    // Handle keyboard input
+    document.addEventListener("keydown", changeDirection);
+
+    function changeDirection(event) {
+      const keyPressed = event.keyCode;
+      if (keyPressed === 37 && snakeXSpeed !== 1) {
+        snakeXSpeed = -1;
+        snakeYSpeed = 0;
+      } else if (keyPressed === 38 && snakeYSpeed !== 1) {
+        snakeXSpeed = 0;
+        snakeYSpeed = -1;
+      } else if (keyPressed === 39 && snakeXSpeed !== -1) {
+        snakeXSpeed = 1;
+        snakeYSpeed = 0;
+      } else if (keyPressed === 40 && snakeYSpeed !== -1) {
+        snakeXSpeed = 0;
+        snakeYSpeed = 1;
+      }
+    }
+
+    // Update the game state
+    function update() {
+      snakeX += snakeXSpeed;
+      snakeY += snakeYSpeed;
+
+      // Wrap the snake around the game board
+      if (snakeX >= boardWidth) {
+        snakeX = 0;
+      } else if (snakeX < 0) {
+        snakeX = boardWidth - 1;
+      }
+
+      if (snakeY >= boardHeight) {
+        snakeY = 0;
+      } else if (snakeY < 0) {
+        snakeY = boardHeight - 1;
+      }
+
+      // Check for collision with the food
+      if (snakeX === foodX && snakeY === foodY) {
+        score++;
+        foodX = Math.floor(Math.random() * boardWidth);
+        foodY = Math.floor(Math.random() * boardHeight);
+      } else {
+        // Remove the tail of the snake
+        snakeBody.pop();
+      }
+
+      // Check for collision with the snake body
+      for (let i = 0; i < snakeBody.length; i++) {
+        if (snakeBody[i].x === snakeX && snakeBody[i].y === snakeY) {
+          gameOver();
+        }
+      }
+
+      // Update the snake body
+      const newHead = { x: snakeX, y: snakeY };
+      snakeBody.unshift(newHead);
+
+      // Clear the canvas
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw the snake
+      for (let i = 0; i < snakeBody.length; i++) {
+        drawSnakePart(snakeBody[i].x, snakeBody[i].y);
+      }
+
+      // Draw the food
+      drawFood(foodX, foodY);
+
+      // Draw the score
+      context.fillStyle = "black";
+      context.font = "20px Arial";
+      context.fillText("Score: " + score, 10, 30);
+    }
+
+    // Draw a snake part
+    function drawSnakePart(x, y) {
+      context.fillStyle = "yelllow";
+      context.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+      context.strokeStyle = "white";
+      context.strokeRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+    }
+
+    // Draw the food
+    function drawFood(x, y) {
+      context.fillStyle = "red";
+      context.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+      context.strokeStyle = "white";
+      context.strokeRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+    }
+
+    // Game over
+    function gameOver() {
+      clearInterval(gameLoop);
+      context.fillStyle = "black";
+      context.font = "30px Arial";
+      context.fillText("Game Over!", canvas.width / 2 - 80, canvas.height / 2);
+    }
+
+    // Main game loop
+    const gameLoop = setInterval(update, 100);
+  </script>
+</body>
 </html>
