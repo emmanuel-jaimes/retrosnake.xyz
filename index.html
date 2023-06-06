@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo&family=Montserrat:wght@400;500;600;800&family=Press+Start+2P&family=Source+Code+Pro:wght@300;400&display=swap" rel="stylesheet">
 <head>
-  <title>Snake Game</title>
+  <title>Retro Snake</title>
+  <h1 id="header">Retro Snake</h1>
   <style>
+    h1 {
+      color: whitesmoke;  
+      font-family: 'Press Start 2P', cursive;
+      text-align: center;
+    }
     canvas {
-      border: 1px solid #000;
+      border: 2px solid yellow;
       display: block;
+      stroke-width: 5px;
       margin: 0 auto;
+      background-color: #000;
     }
   </style>
 </head>
 <body>
+  <style>
+    body {
+      padding-top: 10vh;
+      background-color: black;
+    }
+  </style>
   <canvas id="gameCanvas" width="400" height="400"></canvas>
 
   <script>
@@ -66,17 +83,17 @@
       snakeX += snakeXSpeed;
       snakeY += snakeYSpeed;
 
-      // Wrap the snake around the game board
+      // check for collision with the board
       if (snakeX >= boardWidth) {
-        snakeX = 0;
+        snakeX = 0
       } else if (snakeX < 0) {
-        snakeX = boardWidth - 1;
+        snakeX = boardWidth;
       }
 
       if (snakeY >= boardHeight) {
         snakeY = 0;
       } else if (snakeY < 0) {
-        snakeY = boardHeight - 1;
+        snakeY = boardHeight;
       }
 
       // Check for collision with the food
@@ -112,16 +129,16 @@
       drawFood(foodX, foodY);
 
       // Draw the score
-      context.fillStyle = "black";
+      context.fillStyle = "white";
       context.font = "20px Arial";
       context.fillText("Score: " + score, 10, 30);
     }
 
     // Draw a snake part
     function drawSnakePart(x, y) {
-      context.fillStyle = "yelllow";
+      context.fillStyle = "yellow";
       context.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
-      context.strokeStyle = "white";
+      context.strokeStyle = "black";
       context.strokeRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
     }
 
@@ -136,8 +153,8 @@
     // Game over
     function gameOver() {
       clearInterval(gameLoop);
-      context.fillStyle = "black";
-      context.font = "30px Arial";
+      context.fillStyle = "white";
+      context.font = "300px Arial";
       context.fillText("Game Over!", canvas.width / 2 - 80, canvas.height / 2);
     }
 
